@@ -267,9 +267,13 @@ The battery sensors listed below describe the state of the battery for a few dif
 | `charger_type` | The type of charger being used on the device |
 | `is_charging` | Whether or not the device is actively charging |
 
-![Android](/assets/android.svg)
+:::info
+The `battery_power` sensor converts the values returned by the device to amperes and volts. However, some devices do not follow Android documentation and may return values in a different unit, which results in the sensor being incorrect. For these devices you may need to adjust the sensor setting for 'Battery current divisor' to properly convert the `current` to amperes (and when using <span class='beta'>BETA</span>: and for 'Battery voltage divisor' to properly convert the `voltage` to volts).
 
-The `battery_power` sensor attempts to convert microamperes to amperes however some devices do not follow Android documentation and may return a different unit. For these devices you may need to adjust the sensor setting for `Battery Current Divisor` to properly convert the `current` to amperes.
+Common values for the Battery current divisor: 1000000 (default, microamperes), 1000 (milliamperes), 1000000000 (nanoamperes)
+
+Common values for the Battery voltage divisor: 1000 (default, millivolts), 1 (no conversion required, volts)
+:::
 
 ## Bluetooth Sensors
 ![Android](/assets/android.svg)<br />
@@ -284,7 +288,7 @@ This Bluetooth Connection state will be the total number of connected bluetooth 
 There will also be a binary sensor for the `bluetooth_state` that will represent whether or not bluetooth is turned on for the device. This sensor will update anytime the state of bluetooth changes.
 
 ![Android](/assets/android.svg)
-A BLE Transmitter sensor allows your device to transmit a BLE iBeacon. The iBeacon is capable of being detected by the [iBeacon integration](https://www.home-assistant.io/integrations/ibeacon) if your device sends the device name ([see why here](https://github.com/home-assistant/android/pull/2941#issuecomment-1272379540)). This sensor can also be useful in conjunction with projects like [roomassistant](https://www.room-assistant.io/) and [esp32-mqtt-room ](https://jptrsn.github.io/ESP32-mqtt-room/) to allow room level tracking.  The current transmitting ID (UUID-Major-Minor) is reported as an attribute that can be copied for use with these systems.
+A BLE Transmitter sensor allows your device to transmit a BLE iBeacon. The iBeacon is capable of being detected by the [iBeacon integration](https://www.home-assistant.io/integrations/ibeacon) if your device sends the device name ([see why here](https://github.com/home-assistant/android/pull/2941#issuecomment-1272379540)). If your device does not send its device name, it can still be detected if you explicitly allow the UUID via the iBeacon integration options. This sensor can also be useful in conjunction with projects like [roomassistant](https://www.room-assistant.io/) and [esp32-mqtt-room ](https://jptrsn.github.io/ESP32-mqtt-room/) to allow room level tracking.  The current transmitting ID (UUID-Major-Minor) is reported as an attribute that can be copied for use with these systems.
 
 :::caution
 This sensor can impact battery life, particularly if used wih Transmit Power set to High. The iBeacon is transmitted every second (low latency to save battery, but sufficient for room presence).
@@ -296,6 +300,7 @@ There are also settings to alter:
 *   the Transmit power (between Ultra Low, Low, Medium and High)
 *   the Advertise mode (between Low Power (1Hz), Balanced (3Hz) and Low latency (10Hz))
 *   the Measured power at 1 meter (must be a negative number)
+*   <span class='beta'>BETA</span> whether Transmit is only enabled on Home Wifi Network SSIDs 
 
 A Transmit setting toggle will start or stop the BLE transmissions. This setting as well as most of the above settings can be changed via the [notification command](../notifications/commands.md#ble-beacon-transmitter).
 

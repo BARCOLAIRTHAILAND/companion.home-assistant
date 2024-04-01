@@ -242,7 +242,7 @@ automation:
 
 ### Notification Channels
 
-Notification channels allows users to separate their notifications easily (i.e. alarm vs laundry) so they can customize aspects like what type of sound is made and a lot of other device specific features. Devices running Android 8.0+ are able to create and manage notification channels on the fly using automations. Once a channel is created you can navigate to your notification settings and you will find the newly created channel, from there you can customize the behavior based on what your device allows.
+Notification channels (on some devices: _notification categories_) allow you to separate your notifications easily (i.e. alarm vs laundry) and customize aspects like the notification sound and a lot of other device specific features. Devices running Android 8.0+ are able to create and manage notification channels on the fly using automations. Once a channel is created you can navigate to your notification settings and you will find the newly created channel, from there you can customize the behavior based on what your device allows.
 
 #### Creating a channel
 
@@ -567,6 +567,7 @@ You may want to utilize [notification timeouts](#notification-timeout) or [repla
 
 - chronometer - true to enable chronometer mode
 - when - the timestamp to count up or down to (seconds since 01/01/1970)
+- <span class='beta'>BETA</span> when_relative - true makes the value of "when" relative in seconds like "timeout"
 
 ```yaml
 automation:
@@ -580,8 +581,10 @@ automation:
           message: >-
             Next Alarm At {{ states('sensor.<your_device_id_here>_next_alarm') }}
           data:
+            timeout: 120
             chronometer: true
-            when: "1609459200"
+            when: 120
+            when_relative: true
 ```
 
 ### Alert Once
